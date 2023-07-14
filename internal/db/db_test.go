@@ -86,7 +86,7 @@ func TestFlights(t *testing.T) {
 	departureDate, returnDate := randomDateStrings()
 	destination := randomCity()
 
-	flights, _ := Flights(departureDate, returnDate, destination, -1)
+	flights, _ := Flights(departureDate, returnDate, destination)
 
 	prevFlightPrice := 0
 
@@ -112,7 +112,7 @@ func TestHotels(t *testing.T) {
 	checkInDate, checkOutDate := randomDateStrings()
 	destination := randomCity()
 
-	hotels, _ := Hotels(checkInDate, checkOutDate, destination, -1)
+	hotels, _ := Hotels(checkInDate, checkOutDate, destination)
 	prevHotelPrice := 0
 
 	// Test if all received hotels match the relevant arguments, and assert that they are sorted cheapest first

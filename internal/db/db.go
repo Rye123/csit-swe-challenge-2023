@@ -52,18 +52,13 @@ func isValidDate(dateStr string) bool {
 }	
 
 // Queries and returns a list of return flights given the departureDate, returnDate and destination
-func Flights(departureDate string, returnDate string, destination string, limit int) (flights []Flight, err error) {
+func Flights(departureDate string, returnDate string, destination string) (flights []Flight, err error) {
 	// Validate dates
 	if !isValidDate(departureDate) {
 		return nil, errors.New("Flights: Invalid departureDate.")
 	}
 	if !isValidDate(returnDate) {
 		return nil, errors.New("Flights: Invalid returnDate.")
-	}
-
-	// Validate limit
-	if limit < -1 {
-		return nil, errors.New("Flights: Invalid limit.")
 	}
 
 	// Standardise destination string
@@ -79,7 +74,7 @@ func Flights(departureDate string, returnDate string, destination string, limit 
 }
 
 // Queries and returns a list of hotels given the checkInDate, checkOutDate and destination
-func Hotels(checkInDate string, checkOutDate string, destination string, limit int) (hotels []Hotel, err error) {
+func Hotels(checkInDate string, checkOutDate string, destination string) (hotels []Hotel, err error) {
 	// Validate dates
 	if !isValidDate(checkInDate) {
 		return nil, errors.New("Hotels: Invalid checkInDate.")
@@ -89,20 +84,11 @@ func Hotels(checkInDate string, checkOutDate string, destination string, limit i
 		return nil, errors.New("Hotels: Invalid checkOutDate.")
 	}
 
-	// Validate limit
-	if limit < -1 {
-		return nil, errors.New("Hotels: Invalid limit.")
-	}
-
 	// Standardise destination string
 	destination = strings.Title(strings.ToLower(destination))
 
 	// TODO: replace with db code, for now simply generates data where necessary.
-	if limit == -1 {
-		limit = 15
-	}
-
-	count := rand.Intn(limit)
+	count := rand.Intn(15)
 	hotels = make([]Hotel, count)
 
 	for i := 0; i < count; i++ {

@@ -5,7 +5,7 @@ import "github.com/Rye123/csit-swe-challenge-2023/internal/db"
 
 func main() {
 	fmt.Println("Sending Query.")
-	flights, err := db.Flights("2023-12-10", "2023-12-20", "Abu Dhabi", -1)
+	flights, err := db.Flights("2023-12-10", "2023-12-20", "Abu Dhabi")
 	if err != nil {
 		panic(err)
 	}
