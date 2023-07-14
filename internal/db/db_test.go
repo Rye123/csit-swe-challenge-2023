@@ -58,11 +58,34 @@ func randomCity() string {
 	return cities[rand.Intn(len(cities))]
 }
 
+func TestDate(t *testing.T) {
+	// Valid date
+	date1, date2 := randomDateStrings()
+	if !isValidDate(date1) || !isValidDate(date2) {
+		t.Fatalf("TestDate: Valid datestrings registered as invalid: %s %s", date1, date2)
+	}
+
+	// Invalid date
+	invalidDates := []string{
+		"notadate", "",
+		"2020-13-01", // invalid month
+		"2020-12-33", // invalid day
+		"20-12-01", "2020-1-01", "2020-01-1", // invalid day/month/year formats
+		"2020/12/01", "2020-Dec-01", "2020 Dec 01", "2020 12 01", // invalid formats
+	}
+
+	for _, datestr := range invalidDates {
+		if isValidDate(datestr) {
+			t.Fatalf("TestDate: Invalid datestring %s registed as valid.", datestr)
+		}
+	}
+}
+
 func TestFlights(t *testing.T) {
 	departureDate, returnDate := randomDateStrings()
 	destination := randomCity()
 	
-	flights := Flights(departureDate, returnDate, destination)
+	flights, _ := Flights(departureDate, returnDate, destination, -1)
 
 	prevFlightPrice :=  float64(0)
 	
@@ -88,7 +111,7 @@ func TestHotels(t *testing.T) {
 	checkInDate, checkOutDate := randomDateStrings()
 	destination := randomCity()
 
-	hotels := Hotels(checkInDate, checkOutDate, destination)
+	hotels, _ := Hotels(checkInDate, checkOutDate, destination, -1)
 	prevHotelPrice := float64(0)
 
 	// Test if all received hotels match the relevant arguments, and assert that they are sorted cheapest first
