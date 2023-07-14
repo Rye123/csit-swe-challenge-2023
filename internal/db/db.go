@@ -12,13 +12,13 @@ import "strings"
 
 // Represents a single flight from SG to city
 type Flight struct {
-	City             string `json: "city"`          // Destination City
-	DepartureDate    string `json: "departureDate"` // Date of Departure from SG (YYYY-MM-DD)
-	DepartureAirline string `json: "departureAirline"`
-	DeparturePrice   int    `json: "departurePrice"`
-	ReturnDate       string `json: "returnDate"` // Date of Return from Destination City (YYYY-MM-DD)
-	ReturnAirline    string `json: "returnAirline"`
-	ReturnPrice      int    `json: "returnPrice"`
+	City             string `json:"City"`          // Destination City
+	DepartureDate    string `json:"Departure Date"` // Date of Departure from SG (YYYY-MM-DD)
+	DepartureAirline string `json:"Departure Airline"`
+	DeparturePrice   int    `json:"Departure Price"`
+	ReturnDate       string `json:"Return Date"` // Date of Return from Destination City (YYYY-MM-DD)
+	ReturnAirline    string `json:"Return Airline"`
+	ReturnPrice      int    `json:"Return Price"`
 }
 
 func (f *Flight) Price() int {
@@ -27,11 +27,11 @@ func (f *Flight) Price() int {
 
 // Represents a hotel in city
 type Hotel struct {
-	City         string `json: "city"`         // City of Hotel
-	CheckInDate  string `json: "checkInDate"`  // Date of check-in (YYYY-MM-DD)
-	CheckOutDate string `json: "checkOutDate"` // Date of check-out(YYYY-MM-DD)
-	Hotel        string `json: "hotel"`
-	Price        int    `json: "price"`
+	City         string `json:"City"`         // City of Hotel
+	CheckInDate  string `json:"Check In Date"`  // Date of check-in (YYYY-MM-DD)
+	CheckOutDate string `json:"Check Out Date"` // Date of check-out(YYYY-MM-DD)
+	Hotel        string `json:"Hotel"`
+	Price        int    `json:"Price"`
 }
 
 var test_hotels = []string{"A Hotel", "Hotel B", "Hotel 123"}

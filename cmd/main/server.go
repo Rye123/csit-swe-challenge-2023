@@ -26,7 +26,7 @@ func getFlights(c *gin.Context) {
 		fmt.Println(err)
 		c.JSON(http.StatusNotFound, nil)
 	} else {
-		c.JSON(http.StatusOK, flights)
+		c.JSON(http.StatusOK, flights[0])
 	}
 }
 
