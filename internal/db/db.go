@@ -6,31 +6,31 @@ package db
 import "math/rand"
 import "errors"
 import "time"
+import "strings"
 
 // Represents a single flight from SG to city
 type Flight struct {
-	City             string  `json: "city"`             // Destination City
-	DepartureDate    string  `json: "departureDate"`    // Date of Departure from SG (YYYY-MM-DD)
+	City             string  `json: "city"`          // Destination City
+	DepartureDate    string  `json: "departureDate"` // Date of Departure from SG (YYYY-MM-DD)
 	DepartureAirline string  `json: "departureAirline"`
-	DeparturePrice   float64 `json: "departurePrice"`
-	ReturnDate       string  `json: "returnDate"`       // Date of Return from Destination City (YYYY-MM-DD)
+	DeparturePrice   int     `json: "departurePrice"`
+	ReturnDate       string  `json: "returnDate"` // Date of Return from Destination City (YYYY-MM-DD)
 	ReturnAirline    string  `json: "returnAirline"`
-	ReturnPrice      float64 `json: "returnPrice"`
+	ReturnPrice      int     `json: "returnPrice"`
 }
 
-func (f *Flight) Price() float64 {
+func (f *Flight) Price() int {
 	return f.DeparturePrice + f.ReturnPrice
 }
 
 // Represents a hotel in city
 type Hotel struct {
-	City         string   `json: "city"`         // City of Hotel
-	CheckInDate  string   `json: "checkInDate"`  // Date of check-in (YYYY-MM-DD)
-	CheckOutDate string   `json: "checkOutDate"` // Date of check-out(YYYY-MM-DD)
-	Hotel        string   `json: "hotel"`
-	Price        float64  `json: "price"`
+	City         string  `json: "city"`         // City of Hotel
+	CheckInDate  string  `json: "checkInDate"`  // Date of check-in (YYYY-MM-DD)
+	CheckOutDate string  `json: "checkOutDate"` // Date of check-out(YYYY-MM-DD)
+	Hotel        string  `json: "hotel"`
+	Price        int     `json: "price"`
 }
-
 
 var test_hotels = []string{"A Hotel", "Hotel B", "Hotel 123"}
 var test_airlines = []string{"Singapore Airlines", "Emirates", "Another Airline", "US Airways", "Scoot"}
@@ -49,7 +49,7 @@ func isValidDate(dateStr string) bool {
 		return false
 	}
 	return true
-}
+}	
 
 // Queries and returns a list of return flights given the departureDate, returnDate and destination
 func Flights(departureDate string, returnDate string, destination string, limit int) (flights []Flight, err error) {
@@ -65,27 +65,16 @@ func Flights(departureDate string, returnDate string, destination string, limit 
 	if limit < -1 {
 		return nil, errors.New("Flights: Invalid limit.")
 	}
+
+	// Standardise destination string
+	destination = strings.Title(strings.ToLower(destination))
+
+	// Query DB
+	flights, err = queryFlights(departureDate, returnDate, destination)
+	if err != nil {
+		return nil, err
+	}
 	
-	// TODO: replace with db code, for now simply generates data where necessary.
-	if limit == -1 {
-		limit = 10
-	}
-	count := rand.Intn(limit)
-	flights = make([]Flight, count)
-
-	for i := 0; i < count; i++ {
-		flights[i] = Flight{
-			City: destination,
-			DepartureDate: departureDate,
-			DepartureAirline: randomAirline(),
-			DeparturePrice: float64(rand.Intn(1500) + 500),
-			ReturnDate: returnDate,
-			ReturnAirline: randomAirline(),
-			ReturnPrice: float64(rand.Intn(1500) + 500),
-		}
-	}
-
-	// TODO: sort by cheapest price
 	return flights, nil
 }
 
@@ -95,31 +84,34 @@ func Hotels(checkInDate string, checkOutDate string, destination string, limit i
 	if !isValidDate(checkInDate) {
 		return nil, errors.New("Hotels: Invalid checkInDate.")
 	}
-	
+
 	if !isValidDate(checkOutDate) {
 		return nil, errors.New("Hotels: Invalid checkOutDate.")
 	}
-	
+
 	// Validate limit
 	if limit < -1 {
 		return nil, errors.New("Hotels: Invalid limit.")
 	}
-	
+
+	// Standardise destination string
+	destination = strings.Title(strings.ToLower(destination))
+
 	// TODO: replace with db code, for now simply generates data where necessary.
 	if limit == -1 {
 		limit = 15
 	}
-	
+
 	count := rand.Intn(limit)
 	hotels = make([]Hotel, count)
 
 	for i := 0; i < count; i++ {
 		hotels[i] = Hotel{
-			City: destination,
-			CheckInDate: checkInDate,
+			City:         destination,
+			CheckInDate:  checkInDate,
 			CheckOutDate: checkOutDate,
-			Hotel: randomHotel(),
-			Price: float64(rand.Intn(1500) + 2000),
+			Hotel:        randomHotel(),
+			Price:        rand.Intn(1500) + 2000,
 		}
 	}
 

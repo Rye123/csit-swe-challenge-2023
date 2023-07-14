@@ -14,7 +14,7 @@ import "math/rand"
 import "strconv"
 
 // Converts a two-digit int to a two-digit string
-func itoaTwoDigit(num int) (string) {
+func itoaTwoDigit(num int) string {
 	if num < 10 {
 		return "0" + strconv.Itoa(num)
 	}
@@ -24,7 +24,7 @@ func itoaTwoDigit(num int) (string) {
 func randomDateStrings() (date1, date2 string) {
 	year1 := rand.Intn(5) + 2018
 	year2 := year1 + rand.Intn(1)
-	
+
 	month1 := rand.Intn(11) + 1
 	month2 := rand.Intn(11) + 1
 	if month2 < month1 {
@@ -43,7 +43,7 @@ func randomDateStrings() (date1, date2 string) {
 				year2++
 			}
 		} else if day2 <= day1 {
-			day2 = day1 + rand.Intn(28 - day1)
+			day2 = day1 + rand.Intn(28-day1)
 		}
 	}
 
@@ -68,8 +68,8 @@ func TestDate(t *testing.T) {
 	// Invalid date
 	invalidDates := []string{
 		"notadate", "",
-		"2020-13-01", // invalid month
-		"2020-12-33", // invalid day
+		"2020-13-01",                         // invalid month
+		"2020-12-33",                         // invalid day
 		"20-12-01", "2020-1-01", "2020-01-1", // invalid day/month/year formats
 		"2020/12/01", "2020-Dec-01", "2020 Dec 01", "2020 12 01", // invalid formats
 	}
@@ -84,11 +84,11 @@ func TestDate(t *testing.T) {
 func TestFlights(t *testing.T) {
 	departureDate, returnDate := randomDateStrings()
 	destination := randomCity()
-	
+
 	flights, _ := Flights(departureDate, returnDate, destination, -1)
 
-	prevFlightPrice :=  float64(0)
-	
+	prevFlightPrice := float64(0)
+
 	// Test if all received flights match the relevant arguments, and assert that they are cheapest first
 	for _, flight := range flights {
 		if flight.DepartureDate != departureDate {
