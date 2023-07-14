@@ -19,10 +19,8 @@ type FlightModel struct {
 }
 
 type HotelModel struct {
-	City string `bson: "city"`
-	Hotel string `bson: "hotelName"`
+	HotelName string `bson: "hotelName"`
 	Price int `bson: "price"`
-	Date time.Time `bson: "date"`
 }
 
 // Setup before database usage.
@@ -126,4 +124,111 @@ func queryFlights(departureDateStr string, returnDateStr string, destination str
 	close(flightChan)
 		
 	return flights, nil
+}
+
+func queryHotels(checkInDateStr string, checkOutDateStr string, destination string) (hotels []Hotel, err error) {
+	// Convert datestrings
+	checkInDate, err := time.Parse(time.DateOnly, checkInDateStr)
+	if err != nil { return nil, err }
+	checkOutDate, err := time.Parse(time.DateOnly, checkOutDateStr)
+	if err != nil { return nil, err }
+
+	// Connect to DB
+	mongodb_uri := mongoDB_URI()
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(mongodb_uri))
+	if err != nil {
+		return nil, err
+	}
+
+	defer func() {
+		if err = client.Disconnect(context.TODO()); err != nil {
+			panic(err)
+		}
+	}()
+
+	// Query
+	collection := client.Database("minichallenge").Collection("hotels")
+	agg := bson.A{
+		bson.D{
+			{"$match", // Filter to only the relevant days
+				bson.D{
+					{"date",
+						bson.D{
+							{"$gte", checkInDate},
+							{"$lte", checkOutDate},
+						},
+					},
+					{"city", destination},
+				},
+			},
+		},
+		bson.D{
+			{"$group", // Group by {hotelName, date} and get cheapest price that day
+				bson.D{
+					{"_id",
+						bson.D{
+							{"hotelName", "$hotelName"},
+							{"date", "$date"},
+						},
+					},
+					{"lowestPriceForDay", bson.D{{"$min", "$price"}}},
+				},
+			},
+		},
+		bson.D{
+			{"$group", // Group by hotelName, get sum of prices for that hotel
+				bson.D{
+					{"_id", "$_id.hotelName"},
+					{"totalPrice", bson.D{{"$sum", "$lowestPriceForDay"}}},
+				},
+			},
+		},
+		bson.D{
+			{"$project",
+				bson.D{
+					{"_id", false},
+					{"hotelName", "$_id"},
+					{"price", "$totalPrice"},
+				},
+			},
+		},
+		bson.D{
+			{"$sort",
+				bson.D{{"price", 1}},
+			},
+		},
+	}
+	
+	cursor, err := collection.Aggregate(context.TODO(), agg)
+	if err != nil {
+		return nil, err
+	}
+
+	var hotelModels []HotelModel
+	if err = cursor.All(context.TODO(), &hotelModels); err != nil {
+		return nil, err
+	}
+	
+	if len(hotelModels) == 0 {
+		return []Hotel{}, nil
+	}
+	
+	// Return as Hotels
+	hotels = make([]Hotel, 0)
+	lowestPrice := hotelModels[0].Price
+	
+	for _, hotelModel := range hotelModels {
+		if hotelModel.Price > lowestPrice {
+			continue
+		}
+		hotel := Hotel{
+			City: destination,
+			CheckInDate: checkInDateStr,
+			CheckOutDate: checkOutDateStr,
+			Hotel: hotelModel.HotelName,
+			Price: hotelModel.Price,
+		}
+		hotels = append(hotels, hotel)
+	}
+	return hotels, nil
 }

@@ -87,20 +87,11 @@ func Hotels(checkInDate string, checkOutDate string, destination string) (hotels
 	// Standardise destination string
 	destination = strings.Title(strings.ToLower(destination))
 
-	// TODO: replace with db code, for now simply generates data where necessary.
-	count := rand.Intn(15)
-	hotels = make([]Hotel, count)
-
-	for i := 0; i < count; i++ {
-		hotels[i] = Hotel{
-			City:         destination,
-			CheckInDate:  checkInDate,
-			CheckOutDate: checkOutDate,
-			Hotel:        randomHotel(),
-			Price:        rand.Intn(1500) + 2000,
-		}
+	// Query DB
+	hotels, err = queryHotels(checkInDate, checkOutDate, destination)
+	if err != nil {
+		return nil, err
 	}
-
-	// TODO: sort by cheapest price
+	
 	return hotels, nil
 }
