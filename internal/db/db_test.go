@@ -91,14 +91,14 @@ func TestFlights(t *testing.T) {
 	
 	// Test if all received flights match the relevant arguments, and assert that they are cheapest first
 	for _, flight := range flights {
-		if flight.departureDate != departureDate {
-			t.Fatalf("Invalid Flight (departureDate). Expected %s, Given %s", departureDate, flight.departureDate)
+		if flight.DepartureDate != departureDate {
+			t.Fatalf("Invalid Flight (departureDate). Expected %s, Given %s", departureDate, flight.DepartureDate)
 		}
-		if flight.returnDate != returnDate {
-			t.Fatalf("Invalid Flight (returnDate). Expected %s, Given %s", returnDate, flight.returnDate)
+		if flight.ReturnDate != returnDate {
+			t.Fatalf("Invalid Flight (returnDate). Expected %s, Given %s", returnDate, flight.ReturnDate)
 		}
-		if flight.city != destination {
-			t.Fatalf("Invalid Flight (destination). Expected %s, Given %s", destination, flight.city)
+		if flight.City != destination {
+			t.Fatalf("Invalid Flight (destination). Expected %s, Given %s", destination, flight.City)
 		}
 		if flight.Price() < prevFlightPrice {
 			t.Fatalf("Invalid Flight (price). Not sorted in cheapest first -- Previous Price %f, Current Price %f.", prevFlightPrice, flight.Price())
@@ -116,18 +116,18 @@ func TestHotels(t *testing.T) {
 
 	// Test if all received hotels match the relevant arguments, and assert that they are sorted cheapest first
 	for _, hotel := range hotels {
-		if hotel.checkInDate != checkInDate {
-			t.Fatalf("Invalid Hotel (checkInDate). Expected %s, Given %s", checkInDate, hotel.checkInDate)
+		if hotel.CheckInDate != checkInDate {
+			t.Fatalf("Invalid Hotel (checkInDate). Expected %s, Given %s", checkInDate, hotel.CheckInDate)
 		}
-		if hotel.checkOutDate != checkOutDate {
-			t.Fatalf("Invalid Hotel (checkOutDate). Expected %s, Given %s", checkOutDate, hotel.checkOutDate)
+		if hotel.CheckOutDate != checkOutDate {
+			t.Fatalf("Invalid Hotel (checkOutDate). Expected %s, Given %s", checkOutDate, hotel.CheckOutDate)
 		}
-		if hotel.city != destination {
-			t.Fatalf("Invalid Hotel (destination). Expected %s, Given %s", destination, hotel.city)
+		if hotel.City != destination {
+			t.Fatalf("Invalid Hotel (destination). Expected %s, Given %s", destination, hotel.City)
 		}
-		if hotel.price < prevHotelPrice {
-			t.Fatalf("Invalid Hotel (price). Not sorted in cheapest first -- Previous Price %f, Current Price %f.", prevHotelPrice, hotel.price)
+		if hotel.Price < prevHotelPrice {
+			t.Fatalf("Invalid Hotel (price). Not sorted in cheapest first -- Previous Price %f, Current Price %f.", prevHotelPrice, hotel.Price)
 		}
-		prevHotelPrice = hotel.price
+		prevHotelPrice = hotel.Price
 	}
 }

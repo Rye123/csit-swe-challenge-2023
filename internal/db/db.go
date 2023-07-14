@@ -9,26 +9,26 @@ import "time"
 
 // Represents a single flight from SG to city
 type Flight struct {
-	city             string // Destination City
-	departureDate    string // Date of Departure from SG (YYYY-MM-DD)
-	departureAirline string
-	departurePrice   float64
-	returnDate       string // Date of Return from Destination City (YYYY-MM-DD)
-	returnAirline    string
-	returnPrice      float64
+	City             string  `json: "city"`             // Destination City
+	DepartureDate    string  `json: "departureDate"`    // Date of Departure from SG (YYYY-MM-DD)
+	DepartureAirline string  `json: "departureAirline"`
+	DeparturePrice   float64 `json: "departurePrice"`
+	ReturnDate       string  `json: "returnDate"`       // Date of Return from Destination City (YYYY-MM-DD)
+	ReturnAirline    string  `json: "returnAirline"`
+	ReturnPrice      float64 `json: "returnPrice"`
 }
 
 func (f *Flight) Price() float64 {
-	return f.departurePrice + f.returnPrice
+	return f.DeparturePrice + f.ReturnPrice
 }
 
 // Represents a hotel in city
 type Hotel struct {
-	city         string // City of Hotel
-	checkInDate  string // Date of check-in (YYYY-MM-DD)
-	checkOutDate string // Date of check-out(YYYY-MM-DD)
-	hotel        string
-	price        float64
+	City         string   `json: "city"`         // City of Hotel
+	CheckInDate  string   `json: "checkInDate"`  // Date of check-in (YYYY-MM-DD)
+	CheckOutDate string   `json: "checkOutDate"` // Date of check-out(YYYY-MM-DD)
+	Hotel        string   `json: "hotel"`
+	Price        float64  `json: "price"`
 }
 
 
@@ -75,13 +75,13 @@ func Flights(departureDate string, returnDate string, destination string, limit 
 
 	for i := 0; i < count; i++ {
 		flights[i] = Flight{
-			city: destination,
-			departureDate: departureDate,
-			departureAirline: randomAirline(),
-			departurePrice: float64(rand.Intn(1500) + 500),
-			returnDate: returnDate,
-			returnAirline: randomAirline(),
-			returnPrice: float64(rand.Intn(1500) + 500),
+			City: destination,
+			DepartureDate: departureDate,
+			DepartureAirline: randomAirline(),
+			DeparturePrice: float64(rand.Intn(1500) + 500),
+			ReturnDate: returnDate,
+			ReturnAirline: randomAirline(),
+			ReturnPrice: float64(rand.Intn(1500) + 500),
 		}
 	}
 
@@ -115,11 +115,11 @@ func Hotels(checkInDate string, checkOutDate string, destination string, limit i
 
 	for i := 0; i < count; i++ {
 		hotels[i] = Hotel{
-			city: destination,
-			checkInDate: checkInDate,
-			checkOutDate: checkOutDate,
-			hotel: randomHotel(),
-			price: float64(rand.Intn(1500) + 2000),
+			City: destination,
+			CheckInDate: checkInDate,
+			CheckOutDate: checkOutDate,
+			Hotel: randomHotel(),
+			Price: float64(rand.Intn(1500) + 2000),
 		}
 	}
 
