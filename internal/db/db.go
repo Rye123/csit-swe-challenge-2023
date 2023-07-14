@@ -1,5 +1,7 @@
-/**
-  Handles querying of data from the database.
+/*
+*
+
+	Handles querying of data from the database.
 */
 package db
 
@@ -10,13 +12,13 @@ import "strings"
 
 // Represents a single flight from SG to city
 type Flight struct {
-	City             string  `json: "city"`          // Destination City
-	DepartureDate    string  `json: "departureDate"` // Date of Departure from SG (YYYY-MM-DD)
-	DepartureAirline string  `json: "departureAirline"`
-	DeparturePrice   int     `json: "departurePrice"`
-	ReturnDate       string  `json: "returnDate"` // Date of Return from Destination City (YYYY-MM-DD)
-	ReturnAirline    string  `json: "returnAirline"`
-	ReturnPrice      int     `json: "returnPrice"`
+	City             string `json: "city"`          // Destination City
+	DepartureDate    string `json: "departureDate"` // Date of Departure from SG (YYYY-MM-DD)
+	DepartureAirline string `json: "departureAirline"`
+	DeparturePrice   int    `json: "departurePrice"`
+	ReturnDate       string `json: "returnDate"` // Date of Return from Destination City (YYYY-MM-DD)
+	ReturnAirline    string `json: "returnAirline"`
+	ReturnPrice      int    `json: "returnPrice"`
 }
 
 func (f *Flight) Price() int {
@@ -25,11 +27,11 @@ func (f *Flight) Price() int {
 
 // Represents a hotel in city
 type Hotel struct {
-	City         string  `json: "city"`         // City of Hotel
-	CheckInDate  string  `json: "checkInDate"`  // Date of check-in (YYYY-MM-DD)
-	CheckOutDate string  `json: "checkOutDate"` // Date of check-out(YYYY-MM-DD)
-	Hotel        string  `json: "hotel"`
-	Price        int     `json: "price"`
+	City         string `json: "city"`         // City of Hotel
+	CheckInDate  string `json: "checkInDate"`  // Date of check-in (YYYY-MM-DD)
+	CheckOutDate string `json: "checkOutDate"` // Date of check-out(YYYY-MM-DD)
+	Hotel        string `json: "hotel"`
+	Price        int    `json: "price"`
 }
 
 var test_hotels = []string{"A Hotel", "Hotel B", "Hotel 123"}
@@ -49,7 +51,7 @@ func isValidDate(dateStr string) bool {
 		return false
 	}
 	return true
-}	
+}
 
 // Queries and returns a list of return flights given the departureDate, returnDate and destination
 func Flights(departureDate string, returnDate string, destination string) (flights []Flight, err error) {
@@ -69,7 +71,7 @@ func Flights(departureDate string, returnDate string, destination string) (fligh
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return flights, nil
 }
 
@@ -92,6 +94,6 @@ func Hotels(checkInDate string, checkOutDate string, destination string) (hotels
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return hotels, nil
 }
