@@ -1,7 +1,8 @@
 /**
   Tests for the db package.
 
-  To run, use:
+  To run, ensure the `.env` file in the root directory is copied to
+  the ./internal/db/ directory, and run:
   ```
   go test ./internal/db -v
   ```
@@ -87,7 +88,7 @@ func TestFlights(t *testing.T) {
 
 	flights, _ := Flights(departureDate, returnDate, destination, -1)
 
-	prevFlightPrice := float64(0)
+	prevFlightPrice := 0
 
 	// Test if all received flights match the relevant arguments, and assert that they are cheapest first
 	for _, flight := range flights {
@@ -101,7 +102,7 @@ func TestFlights(t *testing.T) {
 			t.Fatalf("Invalid Flight (destination). Expected %s, Given %s", destination, flight.City)
 		}
 		if flight.Price() < prevFlightPrice {
-			t.Fatalf("Invalid Flight (price). Not sorted in cheapest first -- Previous Price %f, Current Price %f.", prevFlightPrice, flight.Price())
+			t.Fatalf("Invalid Flight (price). Not sorted in cheapest first -- Previous Price %d, Current Price %d.", prevFlightPrice, flight.Price())
 		}
 		prevFlightPrice = flight.Price()
 	}
@@ -112,7 +113,7 @@ func TestHotels(t *testing.T) {
 	destination := randomCity()
 
 	hotels, _ := Hotels(checkInDate, checkOutDate, destination, -1)
-	prevHotelPrice := float64(0)
+	prevHotelPrice := 0
 
 	// Test if all received hotels match the relevant arguments, and assert that they are sorted cheapest first
 	for _, hotel := range hotels {
@@ -126,7 +127,7 @@ func TestHotels(t *testing.T) {
 			t.Fatalf("Invalid Hotel (destination). Expected %s, Given %s", destination, hotel.City)
 		}
 		if hotel.Price < prevHotelPrice {
-			t.Fatalf("Invalid Hotel (price). Not sorted in cheapest first -- Previous Price %f, Current Price %f.", prevHotelPrice, hotel.Price)
+			t.Fatalf("Invalid Hotel (price). Not sorted in cheapest first -- Previous Price %d, Current Price %d.", prevHotelPrice, hotel.Price)
 		}
 		prevHotelPrice = hotel.Price
 	}
