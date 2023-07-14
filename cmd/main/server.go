@@ -24,7 +24,7 @@ func getFlights(c *gin.Context) {
 	flights, err := db.Flights(departureDate, returnDate, destination)
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(http.StatusNotFound, nil)
+		c.JSON(http.StatusBadRequest, nil)
 	} else {
 		c.JSON(http.StatusOK, flights[0])
 	}
@@ -40,7 +40,7 @@ func getHotels(c *gin.Context) {
 	fmt.Println(hotels)
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(http.StatusNotFound, nil)
+		c.JSON(http.StatusBadRequest, nil)
 	} else {
 		c.JSON(http.StatusOK, hotels)
 	}
