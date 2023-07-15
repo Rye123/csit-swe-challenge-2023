@@ -64,10 +64,12 @@ func queryFlights(departureDateStr string, returnDateStr string, destination str
 	collection := client.Database("minichallenge").Collection("flights")
 	departFilter := bson.D{
 		{"date", departureDate},
+		{"srccity", "Singapore"},
 		{"destcity", destination},
 	}
 	returnFilter := bson.D{
 		{"date", returnDate},
+		{"srccity", destination},
 		{"destcity", "Singapore"},
 	}
 	opts := options.Find().SetSort(bson.D{{"price", 1}}) // Sort by ascending price
@@ -105,6 +107,9 @@ func queryFlights(departureDateStr string, returnDateStr string, destination str
 			defer wg.Done()
 			for _, returnFlight := range returnFlights {
 				if departFlight.Price+returnFlight.Price != lowestPrice {
+					continue
+				}
+				if departFlight.AirlineName != returnFlight.AirlineName {
 					continue
 				}
 				flight := Flight{
