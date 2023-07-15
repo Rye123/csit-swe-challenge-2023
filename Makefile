@@ -9,4 +9,4 @@ run:
 	go run ${MAIN}
 
 test:
-	go test ${TEST_DB}
+	go test ${TEST_DB} -v

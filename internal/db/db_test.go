@@ -13,6 +13,7 @@ package db
 import "testing"
 import "math/rand"
 import "strconv"
+import "reflect"
 
 // Converts a two-digit int to a two-digit string
 func itoaTwoDigit(num int) string {
@@ -132,3 +133,42 @@ func TestHotels(t *testing.T) {
 		prevHotelPrice = hotel.Price
 	}
 }
+
+// Test using CSIT Example Test Case for Flights
+func TestCSITFlightTestCase(t *testing.T) {
+	expectedFlights := []Flight{
+		Flight{
+			City: "Frankfurt",
+			DepartureDate: "2023-12-10",
+			DepartureAirline: "US Airways",
+			DeparturePrice: 1766,
+			ReturnDate: "2023-12-16",
+			ReturnAirline: "US Airways",
+			ReturnPrice: 716,
+		},
+	}
+
+	checkFlights, err := Flights("2023-12-10", "2023-12-16", "Frankfurt")
+	if (err != nil || !reflect.DeepEqual(expectedFlights, checkFlights)) {
+		t.Fatalf("Error when calling Flights.")
+	}
+}
+
+// Test using CSIT Example Test Case for Hotels
+func TestCSITHotelTestCase(t *testing.T) {
+	expectedHotels := []Hotel{
+		Hotel{
+			City: "Frankfurt",
+			CheckInDate: "2023-12-10",
+			CheckOutDate: "2023-12-16",
+			Hotel: "Hotel J",
+			Price: 2959,
+		},
+	}
+
+	checkHotels, err := Hotels("2023-12-10", "2023-12-16", "Frankfurt")
+	if (err != nil || !reflect.DeepEqual(expectedHotels, checkHotels)) {
+		t.Fatalf("Failed Hotels Test Case.")
+	}
+}
+	
